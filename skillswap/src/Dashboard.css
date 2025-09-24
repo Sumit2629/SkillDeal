@@ -1,0 +1,510 @@
+/* Dashboard.css */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard-header {
+    background: white;
+    padding: 20px 50px;
+  }
+  
+  .dashboard-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 30px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    font-size: 18px;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .divider {
+    margin: 0 50px;
+    border: none;
+    height: 1px;
+    background: #eee;
+  }
+  
+  .welcome-section {
+    line-height: 1.4;
+    background-color: rgb(81, 31, 207);
+    padding: 50px;
+    margin: 0 50px;
+    border-radius: 18px;
+    color: white;
+  }
+  
+  .welcome-section h1 {
+    font-size: 50px;
+    margin: 0 0 10px;
+  }
+  
+  .welcome-section p {
+    font-size: 20px;
+    margin: 0 0 30px;
+    color: rgb(190, 190, 190);
+  }
+  
+  .welcome-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .badge-container {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .badge {
+    background-color: #6c4ae4;
+    padding: 10px 18px;
+    border-radius: 18px;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .explore-button {
+    background-color: white;
+    color: rgb(81, 31, 207);
+    font-weight: bold;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 18px;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+  
+  .explore-button:hover {
+    background-color: #e0d8ff;
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+    height: fit-content;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  
+  .stat-icon {
+    font-size: 70px;
+    background: #f0f0f0;
+    border-radius: 18px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 15px;
+  }
+  
+  .stat-number {
+    margin: 15px 0 8px;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    padding-bottom: 0;
+  }
+  
+  .stat-label {
+    margin: 0;
+    font-size: 18px;
+    color: #838383;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 0;
+  }
+  
+  .action-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+  }
+  
+  .action-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    height: fit-content;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .action-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  
+  .action-card-icon {
+    font-size: 70px;
+    background: #f0f0f0;
+    border-radius: 18px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 15px;
+  }
+  
+  .action-card-title {
+    margin: 15px 0 8px;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    padding-bottom: 0;
+  }
+  
+  .action-card-description {
+    margin: 0;
+    font-size: 18px;
+    color: #838383;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 0;
+  }
+  
+  .achievements-section {
+    max-width: 1500px;
+    margin: 80px auto;
+    background-color: #f8f9fb;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .achievements-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  
+  .achievements-header h2 {
+    margin: 0;
+    font-size: 50px;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  .view-all-link {
+    color: #8b3dff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 25px;
+  }
+  
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  
+  .achievement-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+  }
+  
+  .achievement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .achievement-icon {
+    font-size: 50px;
+  }
+  
+  .achievement-title {
+    font-weight: 600;
+    font-size: 25px;
+  }
+  
+  .achievement-progress {
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .progress-bar-container {
+    margin-top: 12px;
+    background: #eee;
+    border-radius: 8px;
+    height: 14px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #9c27b0, #2196f3);
+  }
+  
+  .live-sessions-section {
+    margin-left: 80px;
+    margin-right: 80px;
+  }
+  
+  .live-sessions-header h1 {
+    font-size: 50px;
+    margin: 0 0 10px;
+  }
+  
+  .live-sessions-header p {
+    font-size: 25px;
+    margin: 0;
+  }
+  
+  .session-cards-container {
+    max-width: 1300px;
+    margin: 60px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+  }
+  
+  .session-card {
+    flex: 1 1 350px;
+    background: #fff;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    max-width: 380px;
+  }
+  
+  .session-tags {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .session-level {
+    background-color: #f8d7da;
+    color: #a42828;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 6px 14px;
+    border-radius: 16px;
+  }
+  
+  .session-category {
+    color: #888;
+    font-size: 16px;
+  }
+  
+  .session-card h3 {
+    margin: 0 0 14px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  .session-card p {
+    margin: 0 0 20px;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .session-rewards {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .session-coins, .session-xp {
+    font-size: 15px;
+    border-radius: 12px;
+    padding: 6px 12px;
+  }
+  
+  .session-coins {
+    background: #fff3cd;
+  }
+  
+  .session-xp {
+    background: #e0f0ff;
+  }
+  
+  .session-instructor {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .instructor-avatar {
+    border-radius: 50%;
+    width: 30px;
+  }
+  
+  .instructor-name {
+    margin: 0;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .instructor-title {
+    margin: 0;
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .session-details {
+    display: flex;
+    gap: 14px;
+    font-size: 15px;
+    margin-bottom: 16px;
+    color: #444;
+  }
+  
+  .session-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .session-tag {
+    font-size: 14px;
+    padding: 6px 12px;
+    background: #f0f0f0;
+    border-radius: 14px;
+  }
+  
+  .session-participants {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .session-progress-bar-container {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 16px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  
+  .session-progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #9c27b0, #ffffff);
+  }
+  
+  .join-session-button {
+    display: block;
+    text-align: center;
+    background: linear-gradient(to right, #6a00f4, #ffffff);
+    color: white;
+    padding: 16px 0;
+    border-radius: 16px;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+  }
+  
+  .view-all-sessions {
+    text-align: center;
+    margin-top: 70px;
+  }
+  
+  .view-all-sessions-button {
+    display: inline-block;
+    padding: 18px 42px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(to right, #6a00f4, #ffffff);
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    margin-bottom: 80px;
+  }
+  
+  .daily-challenge-section {
+    line-height: 1.4;
+    background-color: rgb(0, 128, 47);
+    padding: 50px;
+    margin: 0 50px;
+    margin-bottom: 50px;
+    border-radius: 18px;
+    color: white;
+  }
+  
+  .daily-challenge-section h1 {
+    font-size: 50px;
+    margin: 0 0 10px;
+  }
+  
+  .daily-challenge-section p {
+    font-size: 20px;
+    margin: 0 0 30px;
+    color: rgb(190, 190, 190);
+  }
+  
+  .daily-challenge-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .daily-challenge-badge {
+    background-color: white;
+    color: rgb(0, 128, 47);
+    padding: 10px 18px;
+    border-radius: 18px;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .daily-challenge-button {
+    background-color: white;
+    color: rgb(0, 128, 47);
+    font-weight: bold;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 18px;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+  
+  .daily-challenge-button:hover {
+    background-color: #e0d8ff;
+  }
+  
