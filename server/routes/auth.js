@@ -3,7 +3,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
+const nodemailer = require("nodemailer");
+const otpStore = {}; 
 const router = express.Router();
 
 // === SIGNUP (CREATE ACCOUNT) ROUTE ===
@@ -36,7 +37,7 @@ router.post('/register', async (req, res) => {
 
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error'); // Generic server error
+    res.status(500).send('Server Error'); 
   }
 });
 
@@ -49,34 +50,32 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    // 1. Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials.' });
     }
 
-    // 2. Compare the provided password with the stored hashed password
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ msg: 'Invalid credentials.' });
     }
 
-    // --- THIS IS THE KEY CHANGE ---
-    // 3. If credentials are correct, create a JWT token with the user's email
+    
     const payload = {
       user: {
         id: user.id,
-        email: user.email // <-- ADDED THIS LINE
+        email: user.email 
       },
     };
 
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }, // Token expires in 1 hour
+      { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token }); // Send the token back to the client
+        res.json({ token }); 
       }
     );
 
@@ -85,6 +84,97 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+// === SEND OTP TO EMAIL (FORGOT PASSWORD) ===
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ msg: 'Email is required.' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: 'User not found.' });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Store OTP temporarily
+    otpStore[email] = {
+      code: otp,
+      expiresAt: Date.now() + 5 * 60 * 1000,
+    };
+
+    // Configure email sender
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // Use App Password!
+      },
+    });
+
+    // Send OTP to user email
+    await transporter.sendMail({
+      from: "SkillSwap <no-reply@skillswap.com>",
+      to: email,
+      subject: "Your SkillSwap OTP Code",
+      text: `Your OTP is ${otp}. It expires in 5 minutes.`,
+    });
+
+    res.json({ msg: "OTP sent to your email." });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+// === VERIFY OTP ===
+router.post('/verify-otp', (req, res) => {
+  const { email, otp } = req.body;
+
+  const record = otpStore[email];
+
+  if (!record) {
+    return res.status(400).json({ msg: "No OTP found for this email." });
+  }
+
+  if (Date.now() > record.expiresAt) {
+    return res.status(400).json({ msg: "OTP expired." });
+  }
+
+  if (otp !== record.code) {
+    return res.status(400).json({ msg: "Invalid OTP." });
+  }
+
+  res.json({ msg: "OTP verified successfully!" });
+});
+
+
+// === RESET PASSWORD AFTER OTP VERIFIED ===
+router.post("/reset-password", async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ msg: "User not found" });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+
+    await user.save();
+
+    res.json({ msg: "Password updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
 
 module.exports = router;
 

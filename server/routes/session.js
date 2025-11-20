@@ -3,9 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/authMiddleware');
 const User = require('../models/User');
 
-// @route   POST api/session
-// @desc    Create or update a user session
-// @access  Private
+
 router.post('/', auth, async (req, res) => {
   const { title, date, time } = req.body;
 
@@ -38,9 +36,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// @route   DELETE api/session
-// @desc    Delete a user's session
-// @access  Private
+
 router.delete('/', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);

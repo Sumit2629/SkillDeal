@@ -1,35 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // for decode jwt
+import { jwtDecode } from 'jwt-decode';
 import './Dashboard.css';
-import SessionModal from './components/SessionModal'; // 1. Import the modal component
+import ChatSidebar from "./components/ChatSidebar";
+import SessionModal from './components/SessionModal';
+import Chat from "./Chat";
+import VideoCall from "./VideoCall";
+import UserList from "./components/UserList";
+import createRoomId from "./utils/createRoomId";
 
 const Dashboard = () => {
   const [userName, setUserName] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // 2. State to control modal 
+  const [userEmail, setUserEmail] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        const email = decodedToken.user.email;
-        const nameFromEmail = email.split('@')[0];
-        const capitalizedName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
-        setUserName(capitalizedName);
-      } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem('token');
-        navigate('/login');
-      }
-    } else {
-      navigate('/login');
+    const token = localStorage.getItem("token");
+
+    if (!token) return navigate("/login");
+
+    try {
+      const decoded = jwtDecode(token);
+      const email = decoded.user.email;
+      setUserEmail(email);
+
+      const formattedName = email.split("@")[0];
+      setUserName(formattedName.charAt(0).toUpperCase() + formattedName.slice(1));
+    } catch (err) {
+      localStorage.removeItem("token");
+      navigate("/login");
     }
   }, [navigate]);
 
-  // A handler for when the session is created successfully
-    const handleSessionCreated = (newSession) => {
+
+  const handleSessionCreated = (newSession) => {
     alert(`Session "${newSession.title}" created successfully! It will now appear on your profile.`);
   };
 
@@ -41,43 +50,15 @@ const Dashboard = () => {
             <Link to="/browse" className="nav-link">🔍 Skills</Link>
             <Link to="/leaderboard" className="nav-link">🏆 Leaderboard</Link>
             <Link to="/profile" className="nav-link">🪪 Profile</Link>
+            <Link to="/messages" className="nav-link">💬 Messages</Link>
           </nav>
         </header>
+
         <hr className="divider" />
 
         <div className="welcome-section">
           <h1>Welcome back, {userName}! 👋</h1>
           <p>Ready to learn something new today?</p>
-          <div className="welcome-actions">
-            <div className="badge-container">
-              <div className="badge">⚡️ 15-day streak</div>
-              <div className="badge">🏆 Rank #12</div>
-            </div>
-            <Link to="/browse" className="explore-button">Browse Skills</Link>
-          </div>
-        </div>
-
-        <div className="stats-container">
-          <div className="stat-card">
-            <div className="stat-icon">🪙</div>
-            <p className="stat-number">2,850</p>
-            <p className="stat-label">Coins Earned</p>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">⚡️</div>
-            <p className="stat-number">15</p>
-            <p className="stat-label">Current Streak</p>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">🏆</div>
-            <p className="stat-number">12</p>
-            <p className="stat-label">Current Level</p>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">📖</div>
-            <p className="stat-number">156</p>
-            <p className="stat-label">Sessions Completed</p>
-          </div>
         </div>
 
         <div className="action-cards-container">
@@ -299,6 +280,12 @@ const Dashboard = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
         onSessionCreated={handleSessionCreated}
+      />
+
+      <ChatSidebar
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        currentUserEmail={userEmail}
       />
     </>
   );

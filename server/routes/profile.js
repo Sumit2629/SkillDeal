@@ -3,16 +3,10 @@ const router = express.Router();
 const auth = require('../middleware/authMiddleware');
 const User = require('../models/User');
 
-// @route   GET api/profile
-// @desc    Get current user's profile
-// @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    // req.user.id is available from the auth middleware
     const userProfile = await User.findById(req.user.id).select('-password');
-    if (!userProfile) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
+    if (!userProfile) return res.status(404).json({ msg: 'User not found' });
     res.json(userProfile);
   } catch (err) {
     console.error(err.message);
@@ -20,9 +14,6 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// @route   PUT api/profile
-// @desc    Update user profile
-// @access  Private
 router.put('/', auth, async (req, res) => {
   const {
     firstName,
@@ -51,9 +42,7 @@ router.put('/', auth, async (req, res) => {
 
   try {
     let userProfile = await User.findById(req.user.id);
-    if (!userProfile) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
+    if (!userProfile) return res.status(404).json({ msg: 'User not found' });
 
     userProfile = await User.findByIdAndUpdate(
       req.user.id,
@@ -65,6 +54,17 @@ router.put('/', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+// 🆕 NEW ROUTE — returns all users for chat
+router.get("/all-users", async (req, res) => {
+  try {
+    const users = await User.find({}, { password: 0 });
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
   }
 });
 

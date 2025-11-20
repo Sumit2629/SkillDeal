@@ -6,7 +6,7 @@ const ForgotPassword = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -18,11 +18,31 @@ const ForgotPassword = () => {
       return;
     }
 
-    // --- MOCK API CALL ---
-    // In a real application, you would make an API call here to your backend
-    // to send a password reset email. For now, we'll just simulate success.
-    setSuccess(`Password reset link sent to ${email}. Please check your inbox.`);
-    setEmail('');
+    try {
+      // CALL BACKEND: Send OTP
+      const res = await fetch("http://localhost:5000/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (data.msg === "OTP sent to your email.") {
+        setSuccess("OTP sent! Check your inbox.");
+
+        // Redirect to OTP verification page
+        setTimeout(() => {
+          window.location.href = `/verify-otp?email=${email}`;
+        }, 1000);
+      } else {
+        setError(data.msg || "Something went wrong.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      setError("Server error. Please try again later.");
+    }
   };
 
   return (
@@ -43,7 +63,7 @@ const ForgotPassword = () => {
         <div style={styles.header}>
           <div style={styles.logo}>🔑</div>
           <h1 style={styles.title}>Forgot Password?</h1>
-          <p style={styles.subtitle}>Enter your email to receive a reset link</p>
+          <p style={styles.subtitle}>Enter your email to receive an OTP</p>
         </div>
 
         {error && <p style={styles.errorMessage}>{error}</p>}
@@ -67,7 +87,7 @@ const ForgotPassword = () => {
           </div>
 
           <button type="submit" style={styles.submitButton}>
-            Send Reset Link
+            Send OTP
           </button>
         </form>
 
@@ -76,16 +96,27 @@ const ForgotPassword = () => {
         </p>
       </div>
       <style>{`
-        /* Keyframes can be reused from your other files */
-        @keyframes float { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); } }
+        @keyframes float { 
+          0% { transform: translateY(100vh) scale(0); opacity: 0; } 
+          10% { opacity: 1; } 
+          90% { opacity: 1; } 
+          100% { transform: translateY(-100vh) scale(1); opacity: 0; } 
+        }
+        @keyframes slideUp { 
+          from { opacity: 0; transform: translateY(30px); } 
+          to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes pulse { 
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); } 
+          70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); } 
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); } 
+        }
       `}</style>
     </div>
   );
 };
 
-// --- STYLES ---
+// --- STYLES (unchanged, your same visuals) ---
 
 const styles = {
   page: { margin: 0, padding: '1rem', fontFamily: "'Inter', sans-serif", background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' },
@@ -102,9 +133,9 @@ const styles = {
   label: { display: 'block', color: '#4a5568', fontWeight: '600', marginBottom: '0.5rem', fontSize: '14px' },
   inputWrapper: { position: 'relative' },
   inputIcon: { position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#a0aec0', fontSize: '18px', pointerEvents: 'none' },
-  input: { width: '100%', padding: '1rem 1rem 1rem 3rem', border: '1px solid #e2e8f0', borderRadius: '12px', fontSize: '16px', transition: 'all 0.3s ease', background: '#f8fafc', boxSizing: 'border-box', outline: 'none' },
-  submitButton: { width: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', padding: '1rem', borderRadius: '12px', fontSize: '16px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' },
-  link: { color: '#667eea', textDecoration: 'none', fontWeight: '600', transition: 'color 0.3s ease' },
+  input: { width: '100%', padding: '0.9rem 1rem 0.9rem 3rem', border: '1px solid #e2e8f0', borderRadius: '12px', fontSize: '16px', background: '#f8fafc', outline: 'none', boxSizing: "border-box" },
+  submitButton: { width: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', padding: '1rem', borderRadius: '12px', fontSize: '16px', fontWeight: '600', cursor: 'pointer' },
+  link: { color: '#667eea', textDecoration: 'none', fontWeight: '600' },
 };
 
 export default ForgotPassword;
